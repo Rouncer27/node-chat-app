@@ -13,6 +13,11 @@ socket.on('connect', function() {
     //     from: 'user1234',
     //     text: 'Hey, this is Trevor RRRRR'
     // });
+
+    socket.emit('createMessage', {
+        name: 'User 123'
+    })
+
 });
 
 socket.on('disconnect', function() {
@@ -20,10 +25,14 @@ socket.on('disconnect', function() {
 });
 
 
-socket.on('newEmail', function(email) {
-    console.log('new Email: ', email);
-});
-
 socket.on('newMessage', function(newMessage) {
     console.log('newMessage: ', newMessage);
+});
+
+socket.on('newUser', function(newUser) {
+    console.log('newUser: : ', newUser);
+});
+
+socket.on('adminHello', function(adminHello) {
+    console.log('adminHello: ', adminHello);
 });
