@@ -1,6 +1,5 @@
 var socket = io();
 
-
 socket.on('connect', function() {
     console.log( 'browser is connect to server' );
 });
@@ -9,26 +8,30 @@ socket.on('disconnect', function() {
     console.log( 'browser is disconnected from server' );
 });
 
+// This is for the messages on the app. //
 socket.on('newMessage', function(newMessage) {
     var formattedTime = moment(newMessage.createdAt).format('h:mm a');
-    var li = jQuery('<li></li>');
-    li.text(`${newMessage.from} at ${formattedTime}: ${newMessage.text}`);
-
-    jQuery('#messages').append(li);
+    var template = jQuery('#message-template').html();
+    var html = Mustache.render(template, {
+        text: newMessage.text,
+        from: newMessage.from,
+        createdAt: formattedTime
+    });
+    jQuery('#messages').append(html);
 });
 
 
 socket.on('newLocationMessage', function(message) {
     var formattedTime = moment(message.createdAt).format('h:mm a');
-    var li = jQuery('<li></li>');
-    var loactionLink = jQuery('<a target="_blank">User Location Map</a>');
-    li.text(`${message.from} at ${formattedTime}: `);
-    loactionLink.attr("href", message.url);
-    li.append(loactionLink);
-    jQuery('#messages').append(li);
+    var formattedTime = moment(message.createdAt).format('h:mm a');
+    var template = jQuery('#location-message-template').html();
+    var html = Mustache.render(template, {
+        from: message.from,
+        url: message.url,
+        createdAt: formattedTime
+    });
+    jQuery('#messages').append(html);
 });
-
-
 
 jQuery('#message-form').on('submit', function(e) {
     e.preventDefault();
